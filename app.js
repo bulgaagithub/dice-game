@@ -20,7 +20,6 @@ var roundScore = 0;
 
 // Програм эхлэх бэлтгэл
 document.getElementById("score-0").textContent = 0; // илүү хурдтай ажилладаг. id хайж байгаа тохиолдолд энэ функцийг ашиглана.
-document.getElementById("score-0").textContent = 0;
 document.getElementById("score-1").textContent = 0;
 document.getElementById("current-0").textContent = 0;
 document.getElementById("current-1").textContent = 0;
@@ -39,29 +38,61 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
   // alert("Шоог шидлээ: " + diceNumber);
 
   // Буусан тоо нь 1 ээс ялгаатай бол идэвхтэй тоглогчийн ээлжийн оноог нэмэгдүүлнэ. Тоглогчийн ээлжийн оноог өөрчилнө.
-  var currentScore = document.getElementById("current-" + activePlayer);
+
   if (diceNumber !== 1) {
     // 1 -ээс ялгаатай тоо буулаа.
     roundScore += diceNumber;
-    currentScore.textContent = roundScore;
+    document.getElementById("current-" + activePlayer).textContent = roundScore;
   } else {
     // 1 буусан тул тоглогчийн ээлжийг энэ хэсэгт сольж өгнө.
-    roundScore = 0;
-    currentScore.textContent = 0;
-
-    // Хэрвээ идэвхтэй тоглогч нь 0 байвал идэвхтэй тоглогчийг нэг болго.
-    // Үгүй бол идэвхтэй тоглогчийг 0 болго.
-
-    activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
-
-    // Улаан цэгийг шилжүүлэх кодыг хийнэ.
-    // toggle функц нь энэ тагийн класс дотор тухайн класс байвал устгана байхгүй бол нэмнэ.
-    document.querySelector(".player-0-panel").classList.toggle("active");
-    document.querySelector(".player-1-panel").classList.toggle("active");
-
-    // Шоог түр алга болгоно.
-    diceDom.style.display = "none";
+    switchToNextPlayer();
   }
 });
 
 // global object ni function дотор гадна бүгдэд харагдана.
+
+// HOLD товчийг ажиллагаанд оруулах
+document.querySelector(".btn-hold").addEventListener("click", function() {
+  // Уг тоглогчийн цуглуулсан ээлжийн оноог глобаль оноо нь дээр нь нэмж өгнө.
+  scores[activePlayer] += roundScore;
+  // Дэлгэц дээр оноог нь өөрчилнө.
+  document.getElementById("score-" + activePlayer).textContent =
+    scores[activePlayer];
+  // Уг тоглогч хожсон эсэхийг (оноо нь 100-с их эсэх) шалгах
+  if (scores[activePlayer] >= 10) {
+    // Ялагч гэсэн текстийг нэрнийх нь оронд гаргана.
+    document.getElementById("name-" + activePlayer).textContent = "WINNER!!!";
+    document
+      .querySelector(".player-" + activePlayer + "-panel")
+      .classList.toggle("winner");
+    document
+      .querySelector(".player-" + activePlayer + "-panel")
+      .classList.remove("active");
+  } else {
+    // Тоглогчийн ээлжийг солино.
+    switchToNextPlayer();
+  }
+});
+
+// бид нар ямар нэг кодоо хуулж ашиглахад ирээдүйд maintaince хийхэд хэцүү болоод байдаг.
+// системээ өөрчилж сайжруулах үед гэсэн үг
+
+// Энэ функц нь тоглох ээлжийг дараачийн тоглогч руу шилжүүлнэ.
+function switchToNextPlayer() {
+  // Энэ тоглогчийн ээлжиндээ цуглуулсан оноог 0 болгоно.
+  roundScore = 0;
+  document.getElementById("current-" + activePlayer).textContent = roundScore;
+
+  // Хэрвээ идэвхтэй тоглогч нь 0 байвал идэвхтэй тоглогчийг нэг болго.
+  // Үгүй бол идэвхтэй тоглогчийг 0 болго.
+
+  activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
+
+  // Улаан цэгийг шилжүүлэх кодыг хийнэ.
+  // toggle функц нь энэ тагийн класс дотор тухайн класс байвал устгана байхгүй бол нэмнэ.
+  document.querySelector(".player-0-panel").classList.toggle("active");
+  document.querySelector(".player-1-panel").classList.toggle("active");
+
+  // Шоог түр алга болгоно.
+  diceDom.style.display = "none";
+}
