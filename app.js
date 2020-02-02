@@ -1,33 +1,57 @@
-// Тоглогчийн ээлжийг хадгалах хувьсагч, нэгдүгээр тоглогч 0, хоёрдугаар тоглогчийг 1 гэж тэмдэглэе.
-var activePlayer = 0;
-// Тоглогчдийн цуглуулсан оноог хадгалах хувьсагч
-var scores = [0, 0];
-// Тоглогчийн ээлжиндээ цуглуулж байгаа оноог хадгалах хувьсагч
-var roundScore = 0;
-
-// Шоо аль талаараа буусан бэ гэдгийг хадгалах хувьсагч хэрэгтэй, 1-6 гэсэн утгыг энэ хувьсагчид санамсаргүйгээр үүсгэж өгнө.
-
-// Dom oos id gaar ni elementiig olood ternii utgii update hiine.
-// Dom iin neg object butsaj irne.
-
-// document.querySelector("#score-0").textContent = dice;
-
-// document.querySelector("#score-1").innerHTML = "<em>Yes!</em>"; // symantic tag
-// text content дотор html бичих боломжгүй.
-
-// html бичмээр байвал арай өөр property дээр бичнэ.
-// innerHTML
-
-// Програм эхлэх бэлтгэл
-document.getElementById("score-0").textContent = 0; // илүү хурдтай ажилладаг. id хайж байгаа тохиолдолд энэ функцийг ашиглана.
-document.getElementById("score-1").textContent = 0;
-document.getElementById("current-0").textContent = 0;
-document.getElementById("current-1").textContent = 0;
+// Тоглоомын бүх газар ашиглагдах глобаль хувьсагчдыг энд зарлая
+// Аль тоглогч шоо шидэх вэ гэдгийг энд хадгална.
+var activePlayer;
+// хоёр тоглогчийн цуглуулсан оноонууд
+var scores;
+// Идэвхтэй тоглогчийн цуглуулж байгаа ээлжийн оноо.
+var roundScore;
+// Шооны зургийг үзүүлэх элементийг DOM-оос хайж олоод энд хадгалья
 var diceDom = document.querySelector(".dice");
-diceDom.style.display = "none";
 
+// Тоглоомыг эхлүүлнэ.
+initGame();
+
+// Тоглоомыг шинээр эхлэхэд бэлтгэнэ.
+function initGame() {
+  // Тоглогчийн ээлжийг хадгалах хувьсагч, нэгдүгээр тоглогч 0, хоёрдугаар тоглогчийг 1 гэж тэмдэглэе.
+  activePlayer = 0;
+  // Тоглогчдийн цуглуулсан оноог хадгалах хувьсагч
+  scores = [0, 0];
+  // Тоглогчийн ээлжиндээ цуглуулж байгаа оноог хадгалах хувьсагч
+  roundScore = 0;
+
+  // Dom oos id gaar ni elementiig olood ternii utgii update hiine.
+  // Dom iin neg object butsaj irne.
+
+  // document.querySelector("#score-0").textContent = dice;
+
+  // document.querySelector("#score-1").innerHTML = "<em>Yes!</em>"; // symantic tag
+  // text content дотор html бичих боломжгүй.
+
+  // html бичмээр байвал арай өөр property дээр бичнэ.
+  // innerHTML
+
+  // Програм эхлэх бэлтгэл
+  document.getElementById("score-0").textContent = 0; // илүү хурдтай ажилладаг. id хайж байгаа тохиолдолд энэ функцийг ашиглана.
+  document.getElementById("score-1").textContent = 0;
+  document.getElementById("current-0").textContent = 0;
+  document.getElementById("current-1").textContent = 0;
+
+  diceDom.style.display = "none";
+
+  // Тоглогчдийн нэрийг эргүүлж гаргах
+  document.getElementById("name-0").textContent = "PLAYER 1";
+  document.getElementById("name-1").textContent = "PLAYER 2";
+  document.querySelector(".player-0-panel").classList.remove("winner");
+  document.querySelector(".player-1-panel").classList.remove("winner");
+  document.querySelector(".player-0-panel").classList.remove("active");
+  document.querySelector(".player-1-panel").classList.remove("active");
+
+  document.querySelector(".player-0-panel").classList.add("active");
+}
 // Шоог шидэх эвент листенер
 document.querySelector(".btn-roll").addEventListener("click", function() {
+  // Шоо аль талаараа буусан бэ гэдгийг хадгалах хувьсагч хэрэгтэй, 1-6 гэсэн утгыг энэ хувьсагчид санамсаргүйгээр үүсгэж өгнө.
   // 1 - 6 доторх санамсаргүй нэг тоо гаргаж авна.
   var diceNumber = Math.floor(Math.random() * 6) + 1;
   // Шооны зургийг вэб дээр гаргаж ирнэ.
@@ -96,3 +120,6 @@ function switchToNextPlayer() {
   // Шоог түр алга болгоно.
   diceDom.style.display = "none";
 }
+
+// New Game буюу Шинэ тоглоом эхлүүлэх товчний эвент листенер
+document.querySelector(".btn-new").addEventListener("click", initGame);
